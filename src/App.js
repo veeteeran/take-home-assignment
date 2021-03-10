@@ -19,29 +19,21 @@ This      is a second paragraph with extraneous whitespace.`);
 
   const transformText = input => {
     let output = input;
-    let word = "";
-    // Stripping all spaces won't work in case of valid newline
-    // let newStr = output.replace(/\s+/gm, " ")
+    let newStr;
     let outputArr = output.split(" ")
-    let newOutput = ""
     // Use a regular for loop after refactor to make use of index
-    for (word of outputArr) {
-      // Keep the two new lines, assumuming two newlines are always valid
-      if (word.indexOf('\n\n') !== -1) {
-        console.log("contains two newlines")
-      } else if (word.indexOf('\n') !== -1) { // Replace the newline with a space
-        // get index of array element
-        const index = outputArr.indexOf(word)
-        console.log("contains newline")
-        const newWord = word.replace(/\n/, " ")
-        // console.log(newWord)
-        // console.log(index)
-        outputArr.splice(index, 1, newWord)
-        // newOutput = newWord.join(" ")
+    for (let i = 0; i < outputArr.length; i++) {
+      // Keep the two new lines, assuming two newlines are always valid
+      if (outputArr[i].indexOf('\n\n') !== -1) {
+      } else if (outputArr[i].indexOf('\n') !== -1) { // Replace the newline with a space
+        const newWord = outputArr[i].replace(/\n/, " ")
+        outputArr.splice(i, 1, newWord)
       }
-      // newOutput = word.join(" ")
     }
-    console.log(outputArr);
+    newStr = outputArr.join(" ")
+    // Matches whitespace but not newline or carriage return
+    output = newStr.replace(/[^\S\r\n]+/gm, " ")
+
     // Max length of lines is 80 characters
     // If 80th character is in a word, break at previous space
     // A word more than 80 characters can stay on one line
