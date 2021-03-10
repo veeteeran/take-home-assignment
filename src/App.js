@@ -19,9 +19,11 @@ This      is a second paragraph with extraneous whitespace.`);
 
   const transformText = input => {
     let output = input;
-    /*
-    your work goes here!
-    */
+    // Max length of lines is 80 characters
+    // If 80th character is in a word, break at previous space
+    // A word more than 80 characters can stay on one line
+    // 1 newline between paragraphs
+    // 1 space or newline in formatted text
     setTextOutput(output);
   }
   
