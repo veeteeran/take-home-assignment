@@ -2,10 +2,11 @@ import './App.css';
 import React from "react";
 
 function App() {
-  const [textInput, setTextInput] = React.useState(`This is
-a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
+//   const [textInput, setTextInput] = React.useState(`This is
+// a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
 
-This      is a second paragraph with extraneous whitespace.`);
+// This      is a second paragraph with extraneous whitespace.`);
+  const [textInput, setTextInput] = React.useState(`With this utility you generate a 16 character output based on your input of numbers and upper and lower case letters.  Random strings can be unique. Used in computing, a random string generator can also be called a random character string generator.`);
   const [textOutput, setTextOutput] = React.useState('');
 
   const handleChange = event => {
@@ -34,22 +35,28 @@ This      is a second paragraph with extraneous whitespace.`);
     // Matches whitespace but not newline or carriage return
     output = newStr.replace(/[^\S\r\n]+/gm, " ")
 
-    // Works for the given string but not for all yet
     outputArr = output.split(" ")
     let newOutput = ""
     let arr = []
     for (let j = 0; j < outputArr.length; j++) {
-      if (newOutput.length < 80){
-        newOutput += `${outputArr[j]} ` // extraneous space when before the newline
+      if (newOutput.length + outputArr[j].length < 80){
       } else {
+        newOutput = newOutput.slice(0, -1) // slice off extra space at the end
         newOutput += `\n`
+        arr.push(newOutput, `${outputArr[j]} `)
+        newOutput = ""
+      }
+      // Push to array then start a new paragraph
+      if (outputArr[j].indexOf('\n\n') !== -1) {
         arr.push(newOutput)
         newOutput = ""
       }
     }
+    // Yikes definitely refactor
+    arr[arr.length - 1] = arr[arr.length - 1].slice(0, -1)
     arr.push(newOutput)
     console.log(arr)
-    output = arr.join(" ")
+    output = arr.join("")
     // Max length of lines is 80 characters
     // If 80th character is in a word, break at previous space
     // A word more than 80 characters can stay on one line
