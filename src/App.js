@@ -9,9 +9,11 @@ function App() {
   const [textInput, setTextInput] = React.useState(`Withthisutilityyougeneratea16characteroutputbasedonyourinputofnumbersandupperandlowercaseletters.    Random strings can be unique. Used in     computing, 
   
   
-  a random
-  string
-  generator can also be called a random character string generator.`);
+a random
+string
+generator can also be called a random character string generator.
+
+With this utility you generate a 16 character output based on your input.`);
   const [textOutput, setTextOutput] = React.useState('');
 
   const handleChange = event => {
@@ -36,37 +38,38 @@ function App() {
         textArray.splice(i, 1, newWord);
       }
     }
-
+    console.log(textArray)
     output = textArray.join(" ");
     // Regex matches whitespace but not newline or carriage return
     output = output.replace(/[^\S\r\n]+/gm, " ");
-
+    console.log(output)
     return output;
   }
 
   const max80Chars = text => {
     let textArray = text.split(" ");
     let str = "";
+    let word = "";
     let outputArray = [];
     let output;
 
-    for (let j = 0; j < textArray.length; j++) {
-      if (str.length + textArray[j].length < 80) {
-        str += `${textArray[j]} `;
+    for (word of textArray) {
+      if (str.length + word.length < 80) {
+        str += `${word} `;
       } else {
         str = str.slice(0, -1); // slice off extra space at the end
         str += `\n`;
         outputArray.push(str);
         str = ""; // empty str after push
-        str += `${textArray[j]} `;
+        str += `${word} `;
       }
       // Start of a new paragraph
-      if (textArray[j].indexOf('\n\n') !== -1) {
+      if (word.indexOf('\n\n') !== -1) {
         outputArray.push(str);
         str = "";
       }
     }
-    str = str.slice(0, -1); // slice off extra space at the end
+    str = str.slice(0, -1);
     outputArray.push(str); // Push remaining string to array
     output = outputArray.join("");
 
