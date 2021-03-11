@@ -39,7 +39,8 @@ function App() {
     let newOutput = ""
     let arr = []
     for (let j = 0; j < outputArr.length; j++) {
-      if (newOutput.length + outputArr[j].length < 80){
+      if (newOutput.length + outputArr[j].length < 80) {
+        newOutput += `${outputArr[j]} `
       } else {
         newOutput = newOutput.slice(0, -1) // slice off extra space at the end
         newOutput += `\n`
