@@ -2,18 +2,10 @@ import './App.css';
 import React from "react";
 
 function App() {
-//   const [textInput, setTextInput] = React.useState(`This is
-// a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
+  const [textInput, setTextInput] = React.useState(`This is
+a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
 
-// This      is a second paragraph with extraneous whitespace.`);
-  const [textInput, setTextInput] = React.useState(`Withthisutilityyougeneratea16characteroutputbasedonyourinputofnumbersandupperandlowercaseletters.    Random strings can be unique. Used in     computing, 
-  
-  
-a random
-string
-generator can also be called a random character string generator.
-
-With this utility you generate a 16 character output based on your input.`);
+This      is a second paragraph with extraneous whitespace.`);
   const [textOutput, setTextOutput] = React.useState('');
 
   const handleChange = event => {
@@ -27,22 +19,18 @@ With this utility you generate a 16 character output based on your input.`);
 
   const deleteWhitespace = text => {
     let textArray = text.split(" ");
-    let newWord;
     let output;
 
     for (let i = 0; i < textArray.length; i++) {
       // Condition does nothing, assuming two newlines are always valid
       if (textArray[i].indexOf('\n\n') !== -1) {
       } else if (textArray[i].indexOf('\n') !== -1) { // Replace the newline with a space
-        newWord = textArray[i].replace(/\n/, " ");
-        textArray.splice(i, 1, newWord);
+        textArray[i] = textArray[i].replace(/\n/, " ");
       }
     }
-    console.log(textArray)
     output = textArray.join(" ");
     // Regex matches whitespace but not newline or carriage return
     output = output.replace(/[^\S\r\n]+/gm, " ");
-    console.log(output)
     return output;
   }
 
@@ -62,11 +50,13 @@ With this utility you generate a 16 character output based on your input.`);
         outputArray.push(str);
         str = ""; // empty str after push
         str += `${word} `;
+        // console.log(outputArray)
       }
       // Start of a new paragraph
       if (word.indexOf('\n\n') !== -1) {
         outputArray.push(str);
         str = "";
+        // console.log(outputArray)
       }
     }
     str = str.slice(0, -1);
