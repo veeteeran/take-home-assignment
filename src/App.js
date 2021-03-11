@@ -50,13 +50,11 @@ This      is a second paragraph with extraneous whitespace.`);
         outputArray.push(str);
         str = ""; // empty str after push
         str += `${word} `;
-        // console.log(outputArray)
       }
       // Start of a new paragraph
       if (word.indexOf('\n\n') !== -1) {
         outputArray.push(str);
         str = "";
-        // console.log(outputArray)
       }
     }
     str = str.slice(0, -1);
