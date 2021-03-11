@@ -6,7 +6,12 @@ function App() {
 // a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
 
 // This      is a second paragraph with extraneous whitespace.`);
-  const [textInput, setTextInput] = React.useState(`With this utility you generate a 16 character output based on your input of numbers and upper and lower case letters.  Random strings can be unique. Used in computing, a random string generator can also be called a random character string generator.`);
+  const [textInput, setTextInput] = React.useState(`Withthisutilityyougeneratea16characteroutputbasedonyourinputofnumbersandupperandlowercaseletters.    Random strings can be unique. Used in     computing, 
+  
+  
+  a random
+  string
+  generator can also be called a random character string generator.`);
   const [textOutput, setTextOutput] = React.useState('');
 
   const handleChange = event => {
@@ -18,51 +23,62 @@ function App() {
     transformText(textInput);
   };
 
-  const transformText = input => {
-    // Consider lines 22-35 as a separate function
-    let output = input;
-    let newStr;
-    let outputArr = output.split(" ")
-    for (let i = 0; i < outputArr.length; i++) {
-      // Keep the two new lines, assuming two newlines are always valid
-      if (outputArr[i].indexOf('\n\n') !== -1) {
-      } else if (outputArr[i].indexOf('\n') !== -1) { // Replace the newline with a space
-        const newWord = outputArr[i].replace(/\n/, " ")
-        outputArr.splice(i, 1, newWord)
-      }
-    }
-    newStr = outputArr.join(" ")
-    // Matches whitespace but not newline or carriage return
-    output = newStr.replace(/[^\S\r\n]+/gm, " ")
+  const deleteWhitespace = text => {
+    let textArray = text.split(" ");
+    let newWord;
+    let output;
 
-    outputArr = output.split(" ")
-    let newOutput = ""
-    let arr = []
-    for (let j = 0; j < outputArr.length; j++) {
-      if (newOutput.length + outputArr[j].length < 80) {
-        newOutput += `${outputArr[j]} `
-      } else {
-        newOutput = newOutput.slice(0, -1) // slice off extra space at the end
-        newOutput += `\n`
-        arr.push(newOutput, `${outputArr[j]} `)
-        newOutput = ""
-      }
-      // Push to array then start a new paragraph
-      if (outputArr[j].indexOf('\n\n') !== -1) {
-        arr.push(newOutput)
-        newOutput = ""
+    for (let i = 0; i < textArray.length; i++) {
+      // Condition does nothing, assuming two newlines are always valid
+      if (textArray[i].indexOf('\n\n') !== -1) {
+      } else if (textArray[i].indexOf('\n') !== -1) { // Replace the newline with a space
+        newWord = textArray[i].replace(/\n/, " ");
+        textArray.splice(i, 1, newWord);
       }
     }
-    // Yikes definitely refactor
-    arr[arr.length - 1] = arr[arr.length - 1].slice(0, -1)
-    arr.push(newOutput)
-    console.log(arr)
-    output = arr.join("")
-    // Max length of lines is 80 characters
-    // If 80th character is in a word, break at previous space
-    // A word more than 80 characters can stay on one line
-    // 1 newline between paragraphs
-    // 1 space or newline in formatted text
+
+    output = textArray.join(" ");
+    // Regex matches whitespace but not newline or carriage return
+    output = output.replace(/[^\S\r\n]+/gm, " ");
+
+    return output;
+  }
+
+  const max80Chars = text => {
+    let textArray = text.split(" ");
+    let str = "";
+    let outputArray = [];
+    let output;
+
+    for (let j = 0; j < textArray.length; j++) {
+      if (str.length + textArray[j].length < 80) {
+        str += `${textArray[j]} `;
+      } else {
+        str = str.slice(0, -1); // slice off extra space at the end
+        str += `\n`;
+        outputArray.push(str);
+        str = ""; // empty str after push
+        str += `${textArray[j]} `;
+      }
+      // Start of a new paragraph
+      if (textArray[j].indexOf('\n\n') !== -1) {
+        outputArray.push(str);
+        str = "";
+      }
+    }
+    str = str.slice(0, -1); // slice off extra space at the end
+    outputArray.push(str); // Push remaining string to array
+    output = outputArray.join("");
+
+    return output;
+  }
+
+  const transformText = input => {
+    let output = input;
+
+    output = deleteWhitespace(output)
+    output = max80Chars(output)
+    
     setTextOutput(output);
   }
   
