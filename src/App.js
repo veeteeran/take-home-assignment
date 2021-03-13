@@ -2,10 +2,25 @@ import './App.css';
 import React from "react";
 
 function App() {
-  const [textInput, setTextInput] = React.useState(`This is
-a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
+  const [textInput, setTextInput] = React.useState(`This is an extremely long line of text with lots and lot of characters in it. The previous sentence should be on a line by itself, and this one should also. However, this sentence is short. Multiple sentences fit here.
 
-This      is a second paragraph with extraneous whitespace.`);
+
+A very short paragraph.
+
+
+
+Another short paragraph, after multiple blank lines.
+
+
+
+
+Even more blank lines,    as well      as some erratic           space characters.
+This
+sentence
+includes
+a few words on lines by themselves that should be combined, and then
+suchaverylongworditbelongsonalinebyitselfeventhoughitislongerthan80charactersandthelinebeforeisshort,
+however, it's fine for these words to go on the next line. Formatting should continue normally at this point.`);
   const [textOutput, setTextOutput] = React.useState('');
 
   const handleChange = event => {
@@ -17,60 +32,43 @@ This      is a second paragraph with extraneous whitespace.`);
     transformText(textInput);
   };
 
-  const deleteWhitespace = text => {
-    let textArray = text.split(" ");
-    let output;
-
-    for (let i = 0; i < textArray.length; i++) {
-      // Condition does nothing, assuming two newlines are always valid
-      if (textArray[i].indexOf('\n\n') !== -1) {
-      } else if (textArray[i].indexOf('\n') !== -1) { // Replace the newline with a space
-        textArray[i] = textArray[i].replace(/\n/, " ");
+  const formatParagraphs = paragraphs => {
+    const splitParagraphs = paragraphs.split(/\n{2,}/gm)
+    let formatted = []
+    splitParagraphs.forEach(paragraph => {
+      const words = paragraph.split(/\s+/)
+      let formattedParagraphs = []
+      let sentence = ""
+      let word = ""
+      for (word of words) {
+        if (sentence.length + word.length < 80) {
+          sentence += `${word} `;
+        } else {
+          sentence = sentence.slice(0, -1);
+          sentence += `\n`;
+          formattedParagraphs.push(sentence);
+          sentence = "";
+          sentence += `${word} `;
+        }
       }
-    }
-    output = textArray.join(" ");
-    // Regex matches whitespace but not newline or carriage return
-    output = output.replace(/[^\S\r\n]+/gm, " ");
-    return output;
+      sentence = sentence.slice(0, -1);
+      formattedParagraphs.push(sentence);
+      formatted.push(reassembleParagraphs(formattedParagraphs))
+    })
+    return formatted
   }
 
-  const max80Chars = text => {
-    let textArray = text.split(" ");
-    let str = "";
-    let word = "";
-    let outputArray = [];
-    let output;
+  const reassembleParagraphs = formattedParagraphs => {
+    let reassembled = []
+    let paragraph = formattedParagraphs.join("");
+    paragraph += "\n\n"
+    reassembled.push(paragraph)
 
-    for (word of textArray) {
-      if (str.length + word.length < 80) {
-        str += `${word} `;
-      } else {
-        str = str.slice(0, -1); // slice off extra space at the end
-        str += `\n`;
-        outputArray.push(str);
-        str = ""; // empty str after push
-        str += `${word} `;
-      }
-      // Start of a new paragraph
-      if (word.indexOf('\n\n') !== -1) {
-        outputArray.push(str);
-        str = "";
-      }
-    }
-    str = str.slice(0, -1);
-    outputArray.push(str); // Push remaining string to array
-    output = outputArray.join("");
-
-    return output;
+    return reassembled
   }
 
   const transformText = input => {
-    let output = input;
-
-    output = deleteWhitespace(output)
-    output = max80Chars(output)
-    
-    setTextOutput(output);
+    setTextOutput(formatParagraphs(input));
   }
   
   return (
