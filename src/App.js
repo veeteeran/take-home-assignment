@@ -32,43 +32,45 @@ however, it's fine for these words to go on the next line. Formatting should con
     transformText(textInput);
   };
 
-  const formatParagraphs = paragraphs => {
-    const splitParagraphs = paragraphs.split(/\n{2,}/gm)
-    let formatted = []
+  const formatParagraphs = input => {
+    const splitParagraphs = input.split(/\n{2,}/gm)
+    let formattedParagraphs = []
     splitParagraphs.forEach(paragraph => {
       const words = paragraph.split(/\s+/)
-      let formattedParagraphs = []
-      let sentence = ""
+      let formattedLines = []
+      let line = ""
       let word = ""
       for (word of words) {
-        if (sentence.length + word.length < 80) {
-          sentence += `${word} `;
+        if (line.length + word.length < 80) {
+          line += `${word} `;
         } else {
-          sentence = sentence.slice(0, -1);
-          sentence += `\n`;
-          formattedParagraphs.push(sentence);
-          sentence = "";
-          sentence += `${word} `;
+          line = line.slice(0, -1);
+          line += `\n`;
+          formattedLines.push(line);
+          line = "";
+          line += `${word} `;
         }
       }
-      sentence = sentence.slice(0, -1);
-      formattedParagraphs.push(sentence);
-      formatted.push(reassembleParagraphs(formattedParagraphs))
+      line = line.slice(0, -1);
+      formattedLines.push(line);
+      formattedParagraphs.push(formattedLines)
     })
-    return formatted
+    return formattedParagraphs
   }
 
-  const reassembleParagraphs = formattedParagraphs => {
-    let reassembled = []
-    let paragraph = formattedParagraphs.join("");
-    paragraph += "\n\n"
-    reassembled.push(paragraph)
+  // const reassembleParagraphs = formattedLines => {
+  //   let reassembled = []
+  //   let paragraph = formattedLines.join("");
+  //   paragraph += "\n\n"
+  //   reassembled.push(paragraph)
 
-    return reassembled
-  }
+  //   return reassembled
+  // }
 
   const transformText = input => {
-    setTextOutput(formatParagraphs(input));
+    const paragraphs = formatParagraphs(input)
+    console.log(paragraphs)
+    // setTextOutput(formatParagraphs(input));
   }
   
   return (
