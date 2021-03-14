@@ -33,44 +33,36 @@ however, it's fine for these words to go on the next line. Formatting should con
   };
 
   const formatParagraphs = input => {
-    const splitParagraphs = input.split(/\n{2,}/gm)
+    const paragraphs = input.split(/\n{2,}/gm)
     let formattedParagraphs = []
-    splitParagraphs.forEach(paragraph => {
+    paragraphs.forEach(paragraph => {
       const words = paragraph.split(/\s+/)
-      let formattedLines = []
+      let formattedLines = ""
       let line = ""
       let word = ""
+
       for (word of words) {
         if (line.length + word.length < 80) {
-          line += `${word} `;
+          line += `${word} `
         } else {
-          line = line.slice(0, -1);
-          line += `\n`;
-          formattedLines.push(line);
-          line = "";
-          line += `${word} `;
+          line = line.slice(0, -1)
+          line += `\n`
+          formattedLines += line
+          line = ""
+          line += `${word} `
         }
       }
-      line = line.slice(0, -1);
-      formattedLines.push(line);
+
+      line = line.slice(0, -1)
+      formattedLines += line
       formattedParagraphs.push(formattedLines)
     })
-    return formattedParagraphs
+
+    return formattedParagraphs.join("\n\n")
   }
 
-  // const reassembleParagraphs = formattedLines => {
-  //   let reassembled = []
-  //   let paragraph = formattedLines.join("");
-  //   paragraph += "\n\n"
-  //   reassembled.push(paragraph)
-
-  //   return reassembled
-  // }
-
   const transformText = input => {
-    const paragraphs = formatParagraphs(input)
-    console.log(paragraphs)
-    // setTextOutput(formatParagraphs(input));
+    setTextOutput(formatParagraphs(input))
   }
   
   return (
