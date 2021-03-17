@@ -32,8 +32,7 @@ however, it's fine for these words to go on the next line. Formatting should con
     transformText(textInput);
   };
 
-  const formatParagraphs = input => {
-    const paragraphs = input.split(/\n{2,}/gm)
+  const formatParagraphs = paragraphs => {
     let formattedParagraphs = []
     paragraphs.forEach(paragraph => {
       const words = paragraph.split(/\s+/)
@@ -58,11 +57,14 @@ however, it's fine for these words to go on the next line. Formatting should con
       formattedParagraphs.push(formattedLines)
     })
 
-    return formattedParagraphs.join("\n\n")
+    return formattedParagraphs
   }
 
   const transformText = input => {
-    setTextOutput(formatParagraphs(input))
+    const paragraphs = input.split(/\n{2,}/gm)
+    const formattedParagraphs = formatParagraphs(paragraphs)
+    const reassembledText = formattedParagraphs.join('\n\n')
+    setTextOutput(reassembledText)
   }
   
   return (
